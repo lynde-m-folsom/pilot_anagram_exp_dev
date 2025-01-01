@@ -38,6 +38,10 @@ function create_tv_array(json_object, setRun) {
             text: stimulus.anagram,  // The anagram is shown as the stimulus
             setRun: stimulus.setRun,
         };
+        // save it <- hoping this will allow our loops to function correctly
+        obj.saveres = function(response) {
+            this.data.response = response;
+        };
         tv_array.push(obj);
     });
 
