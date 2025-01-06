@@ -59,7 +59,7 @@ function shuffleArray(array) {
  }
 
 function check_dupes(tv_array) {
-    let tv_array_modded = shuffleArray(tv_array);
+    let tv_array_modded = tv_array;
     console.log("TEST: "+tv_array_modded);
     let final_array = [];
     let unique_list = [];

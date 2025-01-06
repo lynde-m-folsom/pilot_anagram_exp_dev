@@ -92,6 +92,9 @@ var jsPsychAnagrammer = (function (jspsych) {
             let timeoutAttempts = 0; // Number of timeout attempts
             const maxTimeoutAttempts = 3; // Maximum number of timeouts
 
+            // trouble shooting var
+            let counter_started = false;
+
             // Create the HTML for the trial
             let html = `<div class="gram">${trial.anagram}</div>`;
             html += `<input class="inputBox" onpaste="return false" type="text" id="inputBox" value="">`;
@@ -187,11 +190,12 @@ var jsPsychAnagrammer = (function (jspsych) {
                     // reset the timeout 
                     this.jsPsych.pluginAPI.clearAllTimeouts();
                  };
-                this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
+                 this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
             };
-            if (trial.trial_duration !== null) {
-              //  this.jsPsych.pluginAPI.clearAllTimeouts();
+            if (trial.trial_duration !== null && counter_started === false) {
+                this.jsPsych.pluginAPI.clearAllTimeouts();
                 this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
+                counter_started = true;
             }
 
             // The event listener for enter key press
