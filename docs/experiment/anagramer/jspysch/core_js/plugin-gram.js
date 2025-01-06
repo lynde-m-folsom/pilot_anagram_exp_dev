@@ -87,7 +87,7 @@ var jsPsychAnagrammer = (function (jspsych) {
             this.jsPsych = jsPsych;
         } // Constructor is the function that is used for creating the object
          // Trial is the function that is used to display the trial and it's details
-        trial(display_element, trial) {
+        trial(display_element, trial_object) {
             var start_time = performance.now(); // Start time of the trial
             let timeoutAttempts = 0; // Number of timeout attempts
             const maxTimeoutAttempts = 3; // Maximum number of timeouts
@@ -96,10 +96,10 @@ var jsPsychAnagrammer = (function (jspsych) {
             let counter_started = false;
 
             // Create the HTML for the trial
-            let html = `<div class="gram">${trial.anagram}</div>`;
+            let html = `<div class="gram">${trial_object.anagram}</div>`;
             html += `<input class="inputBox" onpaste="return false" type="text" id="inputBox" value="">`;
-            if (trial.prompt !== null) { // If there is a prompt, display it
-                html += `<br><br><div id="jspsych-html-button-response-prompt" style="font-size:90%"><strong>${trial.prompt}</strong></div>`;
+            if (trial_object.prompt !== null) { // If there is a prompt, display it
+                html += `<br><br><div id="jspsych-html-button-response-prompt" style="font-size:90%"><strong>${trial_object.prompt}</strong></div>`;
             }
             display_element.innerHTML = html;
 
@@ -107,10 +107,10 @@ var jsPsychAnagrammer = (function (jspsych) {
             var response = {
                 rt: null,
                 key: null,
-                stimulus: trial.anagram,
-                id: trial.id,
-                setRun: trial.setRun,
-                valid: trial.valid, // this will add the valid answers to the response object
+                stimulus: trial_object.anagram,
+                id: trial_object.id,
+                setRun: trial_object.setRun,
+                valid: trial_object.valid, // this will add the valid answers to the response object
             };
 
             // Function to check the response is not blank
@@ -121,15 +121,15 @@ var jsPsychAnagrammer = (function (jspsych) {
                 let answers_filled = true;
             
                 // // Check if the answer is blank and whether blanks are allowed
-                if (!trial.allow_blanks && user_response === "") {
+                if (!trial_object.allow_blanks && user_response === "") {
                      alert("Please enter a response.")
                      answers_filled = false;
                 //     //return; // Exit early if blanks are not allowed
                 } else {
             
                 // Check if the answer is correct if required
-                if (trial.check_answers) {
-                    if (!trial.correct.includes(user_response)) {
+                if (trial_object.check_answers) {
+                    if (!trial_object.correct.includes(user_response)) {
                         document.getElementById('inputBox').style.color = 'grey'; // Mark answer as incorrect visually
                         //answers_correct = false;
                     } else {
@@ -142,17 +142,17 @@ var jsPsychAnagrammer = (function (jspsych) {
                 const trial_data = {
                     response: user_response,
                     rt: response.rt,
-                    id: trial.id,
-                    anagram: trial.anagram,
-                    set: trial.set,
-                    setRun: trial.setRun,
-                    correct: trial.correct,
+                    id: trial_object.id,
+                    anagram: trial_object.anagram,
+                    set: trial_object.set,
+                    setRun: trial_object.setRun,
+                    correct: trial_object.correct,
                     answer_correct: answers_correct,
                 };
             
                 // Handle incorrect answers
-                if (trial.check_answers && !answers_correct && answers_filled) {
-                    trial.mistake_fn(); // Call the mistake handler
+                if (trial_object.check_answers && !answers_correct && answers_filled) {
+                    trial_object.mistake_fn(); // Call the mistake handler
                     //trial_data.response = "mistake"; // Mark the response as a mistake
                     this.jsPsych.finishTrial(trial_data); // End the trial with mistake data
                 } else {
@@ -180,7 +180,7 @@ var jsPsychAnagrammer = (function (jspsych) {
                 console.log(`Timeout attempt: ${timeoutAttempts}`);
 
                 // If the number of timeout attempts is greater than the maximum, end the experiment
-                if (timeoutAttempts > maxTimeoutAttempts && trial.trial_duration !== null) {
+                if (timeoutAttempts > maxTimeoutAttempts && trial_object.trial_duration !== null) {
                     display_element.innerHTML = "Experiment has been cancelled due to inactivity.";
                     this.jsPsych.pluginAPI.clearAllTimeouts();
                     this.jsPsych.endExperiment("Experiment cancelled due to inactivity.");
@@ -190,11 +190,11 @@ var jsPsychAnagrammer = (function (jspsych) {
                     // reset the timeout 
                     this.jsPsych.pluginAPI.clearAllTimeouts();
                  };
-                 this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
+                 this.jsPsych.pluginAPI.setTimeout(end_trial, trial_object.trial_duration);
             };
-            if (trial.trial_duration !== null && counter_started === false) {
+            if (trial_object.trial_duration !== null && counter_started === false) {
                 this.jsPsych.pluginAPI.clearAllTimeouts();
-                this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
+                this.jsPsych.pluginAPI.setTimeout(end_trial, trial_object.trial_duration);
                 counter_started = true;
             }
 
