@@ -251,7 +251,7 @@ timeline.push(blockC);
 // End of the experiment pages ----------------
 const end_confirm_subjid = {
     type: jsPsychAnagrammer,
-    anagram: "Please confirm your Prolific ID",
+    anagram: "Please confirm your Prolific ID by entering the last five digit",
     //correct: subject_id,
     id: "end_confirm_subjid",  
     set: "end_confirm_subjid",
